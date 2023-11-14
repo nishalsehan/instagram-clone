@@ -36,4 +36,12 @@ class ThemeNotifier with ChangeNotifier {
     StorageManager.saveData('themeMode', 'light');
     notifyListeners();
   }
+
+  isDark(){
+    if(_themeData.brightness == Brightness.dark){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }

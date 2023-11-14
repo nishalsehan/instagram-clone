@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_starter_template/screens/splash_screen.dart';
+import 'screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'themes/theme_barrel.dart';

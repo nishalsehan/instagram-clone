@@ -1,4 +1,4 @@
-package lk.devnst.flutter_starter_template
+package lk.devnst.instagram_clone
 
 import io.flutter.embedding.android.FlutterActivity
 
