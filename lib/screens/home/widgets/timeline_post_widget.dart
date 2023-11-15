@@ -1,12 +1,13 @@
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instagram_clone/themes/theme_barrel.dart';
-import 'package:instagram_clone/widgets/avatar.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../themes/theme_barrel.dart';
 import '../../../utils/util_barrel.dart';
+import '../../../widgets/avatar.dart';
+import 'image_widget.dart';
 
 class TimelinePostWidget extends StatefulWidget{
   final Map post;
@@ -16,16 +17,10 @@ class TimelinePostWidget extends StatefulWidget{
   State<TimelinePostWidget> createState() => TimelinePostWidgetState();
 }
 
-class TimelinePostWidgetState extends State<TimelinePostWidget> with SingleTickerProviderStateMixin {
-
+class TimelinePostWidgetState extends State<TimelinePostWidget> {
+  final oCcy = NumberFormat("#,##0", "en_US");
   bool liked = false;
   bool saved = false;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,25 +86,16 @@ class TimelinePostWidgetState extends State<TimelinePostWidget> with SingleTicke
             ],
           ),
         ),
-        GestureDetector(
-          onDoubleTap: (){
-              setState(() {
-                liked = true;
-              });
-            },
-          child: CachedNetworkImage(
-            imageUrl: '${widget.post['image']}',
-            fit: BoxFit.fitWidth,
-            fadeInDuration: const Duration(milliseconds: 500),
-            width: size.width,
-            placeholderFadeInDuration: const Duration(milliseconds: 0),
-            progressIndicatorBuilder: (_,__,___){
-              return SizedBox(
-                width: size.width,
-                height: size.width*0.6,
-              );
-            },
-          ),
+        ImageWidget(
+          onLiked: (){
+            setState(() {
+              if(!liked){
+                widget.post['likes']++;
+              }
+              liked = true;
+            });
+          },
+          images: widget.post['images'],
         ),
         Container(
           width: size.width,
@@ -121,6 +107,11 @@ class TimelinePostWidgetState extends State<TimelinePostWidget> with SingleTicke
                 children: [
                   InkWell(
                     onTap: (){
+                      if(liked){
+                        widget.post['likes']--;
+                      }else{
+                        widget.post['likes']++;
+                      }
                       setState(() {
                         liked = !liked;
                       });
@@ -171,7 +162,7 @@ class TimelinePostWidgetState extends State<TimelinePostWidget> with SingleTicke
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${widget.post['likes']} likes',
+                '${oCcy.format(widget.post['likes'])} likes',
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               const SizedBox(height: 2),
