@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../themes/theme_barrel.dart';
 import '../../../utils/util_barrel.dart';
-import '../../../widgets/avatar.dart';
+import '../../../widgets/widgets_barrel.dart';
 import 'image_widget.dart';
 
 class TimelinePostWidget extends StatefulWidget{
