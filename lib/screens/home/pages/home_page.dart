@@ -46,6 +46,62 @@ class HomePageState extends State<HomePage>{
     },
   ];
 
+  List posts = [
+    {
+      "image": 'https://images.ctfassets.net/az3stxsro5h5/NjZUwfga63k7mTZCeKhvH/2cbcc7fa1e907b0a9d37155077c253f8/Nov1-What_to_Post_on_Instagram_When_You_re_Fresh_Out_of_Ideas-Newsletter-Feature-FL',
+      "user":{
+        "username": 'shainuestk02',
+        "avatar": 'https://media.istockphoto.com/id/1011792072/photo/smiling-young-mixed-race-businesswoman-looking-away.jpg?s=612x612&w=0&k=20&c=TVcVAcA27Xt9h3WASzOXLCTNmdZU9EMce4t7SU0G0ng='
+      },
+      "location": 'Colombo, Sri Lanka',
+      "caption": 'Some things start small 🍟',
+      "likes": '2,353',
+      "create_at": '4 min ago'
+    },
+    {
+      "image": 'https://netstorage-tuko.akamaized.net/images/3f9289668996a14f.jpg?imwidth=900',
+      "user":{
+        "username": 'uplabsofficial',
+        "avatar": 'https://media.istockphoto.com/id/1203044189/photo/happy-african-businessman-worker-looking-at-smart-watch-at-work.webp?b=1&s=170667a&w=0&k=20&c=iIMuQWgcpounP34l5vqkWnAnOPZnMY-4XdaEupJGvag='
+      },
+      "caption": 'Happy monday 🙋🏽‍',
+      "likes": '42',
+      "create_at": '12 hours ago'
+    },
+    {
+      "image": 'https://images.lifestyleasia.com/wp-content/uploads/sites/2/2022/11/21110830/Untitled-design-2022-11-21T083748.810-1600x900.jpg',
+      "user":{
+        "username": 'leomessi',
+        "verified": true,
+        "avatar": 'https://images-na.ssl-images-amazon.com/images/S/pv-target-images/145c89ccd6e1f99b79643d53b58927d48a710c438968bf9417c8314585f96cd3._RI_TTW_SX720_FMjpg_.jpg'
+      },
+      "caption": """La Victoria está en la Mente. Una larga tradición artesanal construyendo baúles fotografiada por para. """,
+      "likes": '53,223',
+      "create_at": '3 days ago'
+    },
+    {
+      "image": 'https://i.insider.com/5bce0b4fd2e6481f3b640b86?width=700',
+      "user":{
+        "username": 'davidm_ai',
+        "avatar": 'https://www.rover.com/blog/wp-content/uploads/cat-favorite-person-min.jpg'
+      },
+      "location": 'United States',
+      "caption": """Dear ocean, Thank you for making us feel tiny, salty, humble and inspired, all at once.""",
+      "likes": '0',
+      "create_at": '23 October'
+    },
+    // {
+    //   "image": '',
+    //   "user":{
+    //     "username": '',
+    //     "avatar": ''
+    //   },
+    //   "caption": '',
+    //   "likes": 0,
+    //   "create_at": ''
+    // },
+  ];
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -92,49 +148,45 @@ class HomePageState extends State<HomePage>{
                   ),
                 ),
               ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-                    return Column(
+              SliverToBoxAdapter(
+                child: Container(
+                  width: size.width,
+                  height: 120,
+                  margin: const EdgeInsets.only(bottom: 8),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if(index == 0)Container(
-                          width: size.width,
-                          height: 120,
-                          margin: const EdgeInsets.only(bottom: 8),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const StoryAvatarWidget(avatar: profileAvatar, name: '', myStory: true),
-                                const SizedBox(
-                                  width: 12,
-                                ),
-                                ListView.separated(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: stories.length,
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index){
-                                      return StoryAvatarWidget(avatar: stories[index]['avatar'], name: stories[index]['name']);
-                                    },
-                                    separatorBuilder: (BuildContext context, int index) {
-                                      return const SizedBox(
-                                        width: 12,
-                                      );
-                                    },
-                                )
-                              ],
-                            ),
-                          ),
+                        const StoryAvatarWidget(avatar: profileAvatar, name: '', myStory: true),
+                        const SizedBox(
+                          width: 12,
                         ),
-                        const TimelinePostWidget()
+                        ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: stories.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index){
+                            return StoryAvatarWidget(avatar: stories[index]['avatar'], name: stories[index]['name']);
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return const SizedBox(
+                              width: 12,
+                            );
+                          },
+                        )
                       ],
-                    );
-                  },
-                  childCount: 3, // Adjust this according to your needs
-                ),
+                    ),
+                  ),
+                )
               ),
+              SliverAnimatedList(
+                  initialItemCount: posts.length,
+                  itemBuilder: (BuildContext context, int index, Animation animation) {
+                    return  TimelinePostWidget(key: UniqueKey(), post: posts[index]);
+                  }
+              )
             ],
           ),
         ),
