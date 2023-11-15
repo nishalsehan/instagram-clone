@@ -56,7 +56,7 @@ class HomePageState extends State<HomePage>{
         "avatar": 'https://media.istockphoto.com/id/1011792072/photo/smiling-young-mixed-race-businesswoman-looking-away.jpg?s=612x612&w=0&k=20&c=TVcVAcA27Xt9h3WASzOXLCTNmdZU9EMce4t7SU0G0ng='
       },
       "location": 'Colombo, Sri Lanka',
-      "caption": 'Some things start small 🍟',
+      "caption": 'Embracing the world through a pixelated lens, one selfie at a time. 📸✨ Lost in the symphony of notifications, yet finding serenity in the scroll. 🌟 #DigitalDiaries #PhoneInHandLifeInFocus',
       "likes": 2353,
       "create_at": '4 min ago'
     },
@@ -68,7 +68,7 @@ class HomePageState extends State<HomePage>{
         "username": 'uplabsofficial',
         "avatar": 'https://media.istockphoto.com/id/1203044189/photo/happy-african-businessman-worker-looking-at-smart-watch-at-work.webp?b=1&s=170667a&w=0&k=20&c=iIMuQWgcpounP34l5vqkWnAnOPZnMY-4XdaEupJGvag='
       },
-      "caption": 'Happy monday 🙋🏽‍',
+      "caption": 'Taking a moment to pause on life\'s staircase and reflect. 🌟 Each step, a chapter; each pause, a chance to breathe. 🍃✨ \n.\n.\n#StaircaseChronicles #ReflectionsInTheQuiet',
       "likes": 42,
       "create_at": '12 hours ago'
     },
@@ -192,7 +192,7 @@ class HomePageState extends State<HomePage>{
               SliverAnimatedList(
                   initialItemCount: posts.length,
                   itemBuilder: (BuildContext context, int index, Animation animation) {
-                    return  TimelinePostWidget(key: UniqueKey(), post: posts[index]);
+                    return  TimelinePostWidget(post: posts[index]);
                   }
               )
             ],

@@ -79,7 +79,7 @@ class ReadMoreState extends State<ReadMore> {
             children: <TextSpan>[
               if(widget.prefix != null)widget.prefix!,
               TextSpan(
-                text: readMore || lastCharacterIndex < 15 || lastCharacterIndex == text.length ? text : text.substring(0, lastCharacterIndex - 15),
+                text: readMore || lastCharacterIndex < 15 || lastCharacterIndex == text.length ? text : text.substring(0, lastCharacterIndex - (15 + (widget.prefix != null?widget.prefix!.text!.length:0))),
                 style: widget.style ?? const TextStyle(color: Colors.black87),
               ),
               if (lastCharacterIndex != text.length)TextSpan(
