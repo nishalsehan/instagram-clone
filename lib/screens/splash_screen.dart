@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:instagram_clone/screens/home/home_barrel.dart';
 
 class SplashScreen extends StatefulWidget{
@@ -29,11 +30,9 @@ class SplashScreenState extends State<SplashScreen>{
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Image(
-              image: const AssetImage(
-                'assets/images/logo.png',
-              ),
-              height: size.height*0.09,
+            SvgPicture.asset(
+              'assets/images/logo.svg',
+              height: size.height*0.15,
             ),
             Positioned(
               bottom: padding.bottom + size.height*0.01,
@@ -63,7 +62,7 @@ class SplashScreenState extends State<SplashScreen>{
   }
 
   Future<void> _delayNavigation() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 3));
     _navigate();
   }
 
