@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../themes/theme_barrel.dart';
 import '../../../utils/util_barrel.dart';
@@ -19,8 +20,10 @@ class TimelinePostWidget extends StatefulWidget{
 
 class TimelinePostWidgetState extends State<TimelinePostWidget> with SingleTickerProviderStateMixin{
   final oCcy = NumberFormat("#,##0", "en_US");
+  final scrollIndicatorController = PageController(viewportFraction: 0.8, keepPage: true);
   bool liked = false;
   bool saved = false;
+  int activeImageIndex = 0;
 
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -42,6 +45,7 @@ class TimelinePostWidgetState extends State<TimelinePostWidget> with SingleTicke
   void dispose() {
     super.dispose();
     _controller.dispose();
+    scrollIndicatorController.dispose();
   }
 
   @override
@@ -118,52 +122,76 @@ class TimelinePostWidgetState extends State<TimelinePostWidget> with SingleTicke
             });
             _animate();
           },
+          onScroll: (index){
+            setState(() {
+              activeImageIndex = index;
+            });
+          },
           images: widget.post['images'],
         ),
         Container(
           width: size.width,
+          height: 46,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Stack(
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.center,
             children: [
-              Row(
-                children: [
-                  Transform.scale(
-                    scale: _animation.value,
-                    child: InkWell(
-                      onTap: () {
-                        if(liked){
-                          widget.post['likes']--;
-                        }else{
-                          widget.post['likes']++;
-                        }
-                        setState(() {
-                          liked = !liked;
-                        });
-                        _animate();
-                      },
-                      child: SvgPicture.asset(
-                        liked?'assets/icons/heart-filled.svg':'assets/icons/heart-outline.svg',
-                        height: 29,
-                        colorFilter: ColorFilter.mode(liked?Colors.redAccent:Theme.of(context).iconTheme.color!, BlendMode.srcIn),
+              Positioned(
+                  left: 0,
+                  child: Row(
+                    children: [
+                      Transform.scale(
+                        scale: _animation.value,
+                        child: InkWell(
+                          onTap: () {
+                            if(liked){
+                              widget.post['likes']--;
+                            }else{
+                              widget.post['likes']++;
+                            }
+                            setState(() {
+                              liked = !liked;
+                            });
+                            _animate();
+                          },
+                          child: SvgPicture.asset(
+                            liked?'assets/icons/heart-filled.svg':'assets/icons/heart-outline.svg',
+                            height: 29,
+                            colorFilter: ColorFilter.mode(liked?Colors.redAccent:Theme.of(context).iconTheme.color!, BlendMode.srcIn),
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(
+                        width: 18,
+                      ),
+                      SvgPicture.asset(
+                        'assets/icons/comments.svg',
+                        height: 29,
+                      ),
+                      const SizedBox(
+                        width: 18,
+                      ),
+                      SvgPicture.asset(
+                        'assets/icons/share.svg',
+                        height: 29,
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    width: 18,
+              ),
+              if(widget.post['images'].length > 1)Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: AnimatedSmoothIndicator(
+                  activeIndex: activeImageIndex,
+                  count:  widget.post['images'].length,
+                  effect: const ScrollingDotsEffect(
+                      dotHeight: 8,
+                      dotWidth: 8,
+                      activeDotScale: 1,
+                      spacing: 4,
+                      activeDotColor: Colors.blue,
+                      dotColor: Colors.black12
                   ),
-                  SvgPicture.asset(
-                    'assets/icons/comments.svg',
-                    height: 29,
-                  ),
-                  const SizedBox(
-                    width: 18,
-                  ),
-                  SvgPicture.asset(
-                    'assets/icons/share.svg',
-                    height: 29,
-                  ),
-                ],
+                ),
               ),
               Positioned(
                   right: 0,

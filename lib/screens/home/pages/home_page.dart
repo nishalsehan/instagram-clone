@@ -50,6 +50,7 @@ class HomePageState extends State<HomePage>{
     {
       "images": [
         'https://images.ctfassets.net/az3stxsro5h5/NjZUwfga63k7mTZCeKhvH/2cbcc7fa1e907b0a9d37155077c253f8/Nov1-What_to_Post_on_Instagram_When_You_re_Fresh_Out_of_Ideas-Newsletter-Feature-FL',
+        'https://i0.wp.com/geardiary.com/wp-content/uploads/2013/02/20130212-101840.jpg',
       ],
       "user":{
         "username": 'shainuestk02',
@@ -75,6 +76,12 @@ class HomePageState extends State<HomePage>{
     {
       "images": [
         'https://images.lifestyleasia.com/wp-content/uploads/sites/2/2022/11/21110830/Untitled-design-2022-11-21T083748.810-1600x900.jpg',
+        'https://cloudfront-us-east-2.images.arcpublishing.com/reuters/TVO76CDW5VOCXOIYBW67B76BVY.jpg',
+        'https://images.moneycontrol.com/static-mcnews/2022/12/5-messi-fans-gear-up-for-semi-final-770x433.jpg?impolicy=website&width=770&height=431',
+        'https://media.gq-magazine.co.uk/photos/6481a49fb4c3aec3e98eb003/16:9/w_2560%2Cc_limit/GettyImages-1249814715.jpg',
+        'https://ichef.bbci.co.uk/live-experience/cps/624/cpsprodpb/10D00/production/_128046886_lionelmessi.jpg',
+        'https://englishtribuneimages.blob.core.windows.net/gallary-content/2022/12/2022_12\$largeimg_111321063.JPG',
+        'https://www.newarab.com/sites/default/files/1245748386.jpeg'
       ],
       "user":{
         "username": 'leomessi',
@@ -189,11 +196,19 @@ class HomePageState extends State<HomePage>{
                   ),
                 )
               ),
-              SliverAnimatedList(
-                  initialItemCount: posts.length,
-                  itemBuilder: (BuildContext context, int index, Animation animation) {
-                    return  TimelinePostWidget(post: posts[index]);
-                  }
+              // SliverAnimatedList(
+              //     initialItemCount: posts.length,
+              //     itemBuilder: (BuildContext context, int index, Animation animation) {
+              //       return TimelinePostWidget(key: UniqueKey(),post: posts[index]);
+              //     }
+              // ),
+              SliverList(
+                    delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                      return TimelinePostWidget(post: posts[index]);
+                    },
+                    addRepaintBoundaries: false,
+                    childCount: posts.length, // Adjust this according to your needs
+                ),
               )
             ],
           ),

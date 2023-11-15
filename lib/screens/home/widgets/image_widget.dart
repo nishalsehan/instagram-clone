@@ -1,13 +1,16 @@
 
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ImageWidget extends StatefulWidget{
   final Function() onLiked;
+  final Function(int) onScroll;
   final List<String> images;
-  const ImageWidget({super.key, required this.onLiked, required this.images});
+  const ImageWidget({super.key, required this.onLiked, required this.images, required this.onScroll});
 
   @override
   State<StatefulWidget> createState() =>ImageWidgetState();
@@ -17,15 +20,20 @@ class ImageWidgetState extends State<ImageWidget> with SingleTickerProviderState
   late Animation<double> animation;
   late Animation<double> rotate;
   late AnimationController controller;
+  CarouselController? carouselController = CarouselController();
   double scale = 0.0;
   late double _x = 0;
   late double _y = 0;
 
+  double? aspectRatio;
+
   bool rotateLeft = true;
+  Size size = Size.zero;
 
   @override
   void initState() {
     super.initState();
+    getImageSize();
     const quick = Duration(milliseconds: 500);
     final scaleTween = Tween(begin: 0.0, end: 1.0);
     controller = AnimationController(duration: quick, vsync: this);
@@ -46,7 +54,7 @@ class ImageWidgetState extends State<ImageWidget> with SingleTickerProviderState
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    size = MediaQuery.of(context).size;
     return GestureDetector(
       onDoubleTapDown: (details){
         setState(() {
@@ -59,18 +67,29 @@ class ImageWidgetState extends State<ImageWidget> with SingleTickerProviderState
       },
       child: Stack(
         children: [
-          CachedNetworkImage(
-            imageUrl: widget.images.first,
-            fit: BoxFit.fitWidth,
-            fadeInDuration: const Duration(milliseconds: 500),
-            width: size.width,
-            placeholderFadeInDuration: const Duration(milliseconds: 0),
-            progressIndicatorBuilder: (_,__,___){
-              return SizedBox(
-                width: size.width,
-                height: size.width*0.6,
-              );
-            },
+          CarouselSlider(
+            items: widget.images.map((e) => CachedNetworkImage(
+              imageUrl: e,
+              fit: BoxFit.cover,
+              fadeInDuration: const Duration(milliseconds: 500),
+              width: size.width,
+              placeholderFadeInDuration: const Duration(milliseconds: 0),
+              progressIndicatorBuilder: (_,__,___){
+                return SizedBox(
+                  width: size.width,
+                  height: size.width*0.6,
+                );
+              },
+            )
+            ).toList(),
+            options: CarouselOptions(
+                aspectRatio: aspectRatio??size.width/(size.width*0.6),
+                enableInfiniteScroll: false,
+                onPageChanged: (_,__){
+                  widget.onScroll(_);
+                },
+                viewportFraction: 1
+            ),
           ),
           Positioned(
               left: _x,
@@ -88,12 +107,11 @@ class ImageWidgetState extends State<ImageWidget> with SingleTickerProviderState
                     ),
                   )
               )
-          )
+          ),
         ],
       ),
     );
   }
-
 
   void _animate() {
     animation
@@ -103,5 +121,18 @@ class ImageWidgetState extends State<ImageWidget> with SingleTickerProviderState
       }
     });
     controller.forward();
+  }
+
+  void getImageSize() async {
+    final image = NetworkImage(widget.images.first);
+    final ImageStream stream = image.resolve(ImageConfiguration.empty);
+
+    // Wait for the image to be fully loaded
+    stream.addListener(ImageStreamListener((ImageInfo info, bool synchronousCall) {
+      // Update the image height
+      setState(() {
+        aspectRatio =  info.image.width.toDouble()/info.image.height.toDouble();
+      });
+    }));
   }
 }
