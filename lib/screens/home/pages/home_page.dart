@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instagram_clone/themes/theme_barrel.dart';
-import 'package:provider/provider.dart';
+import '../../../utils/constants.dart';
+import '../widgets/story_avatar_widget.dart';
+import '../widgets/timeline_post_widget.dart';
 
-List<Color> get getColorsList =>  [ const Color(0xFFbc2a8d),const Color(0xFFfccc63), const Color(0xFFfbad50)];
 
 class HomePage extends StatefulWidget{
   const HomePage({super.key});
@@ -15,10 +15,40 @@ class HomePage extends StatefulWidget{
 }
 
 class HomePageState extends State<HomePage>{
+  List stories = [
+    {
+      'avatar': 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww',
+      'name': 'Alexa'
+    },
+    {
+      'avatar': 'https://images.inc.com/uploaded_files/image/1920x1080/getty_624206636_200013332000928034_376810.jpg',
+      'name': '___imishxi____'
+    },
+    {
+      'avatar': 'https://media.istockphoto.com/id/1138438251/photo/woman-drinking-wine-while-listening-her-favorite-on-smart-phone.jpg?s=612x612&w=0&k=20&c=wP_hzpmT9tCDlMF6-r2D_-G7WVTrntDy1HFpS-RJyGk=',
+      'name': 'ashishen94'
+    },
+    {
+      'avatar': 'https://people.com/thmb/aCjjh6SorCeOCO5hARpIvM3QVI8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(979x239:981x241)/Simone-Biles-Jonathan-Owens-042223-01-2000-5683ec1f773745218562a5c12857d2f8.jpg',
+      'name': 'manaskushik'
+    },
+    {
+      'avatar': 'https://images.immediate.co.uk/production/volatile/sites/3/2017/11/peaky-tommy-5d3c20b.jpg?quality=90&resize=620,414',
+      'name': 'deepakkumar2142'
+    },
+    {
+      'avatar': 'https://media.istockphoto.com/id/1440149723/photo/happy-man-social-media-phone-and-living-room-relax-typing-smartphone-and-online-communication.webp?b=1&s=170667a&w=0&k=20&c=G_u5nOP54j90M_S-qjoFxQi7E_sr4cgnKneIUy0agU0=',
+      'name': 'sean.antonbarlonse'
+    },
+    {
+      'avatar': 'https://www.mayoclinichealthsystem.org/-/media/national-files/images/hometown-health/2022/person-wet-from-swimming-and-smiling.jpg?sc_lang=en',
+      'name': 'guilhermepereira5342'
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final padding = MediaQuery.of(context).padding;
     return Scaffold(
       body: SafeArea(
         child: SizedBox(
@@ -30,7 +60,6 @@ class HomePageState extends State<HomePage>{
                 floating: true,
                 pinned: false,
                 elevation: 0,
-                // expandedHeight: 120,
                 excludeHeaderSemantics: true,
                 automaticallyImplyLeading: false,
                 flexibleSpace: Container(
@@ -68,128 +97,30 @@ class HomePageState extends State<HomePage>{
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if(index == 0)SizedBox(
+                        if(index == 0)Container(
                           width: size.width,
                           height: 120,
+                          margin: const EdgeInsets.only(bottom: 8),
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Stack(
-                                      children: [
-                                        Container(
-                                            alignment: Alignment.center,
-                                            padding: const EdgeInsets.all(6),
-                                            height: 95,
-                                            child: const ClipRRect(
-                                              borderRadius: BorderRadius.all(Radius.circular(10000)),
-                                              child: Image(
-                                                image: AssetImage(
-                                                  'assets/images/profile-image.jpg',
-                                                ),
-                                                height: 90,
-                                              ),
-                                            )
-                                        ),
-                                        Positioned(
-                                            bottom: 3,
-                                            right: 3,
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Theme.of(context).scaffoldBackgroundColor,
-                                                    width: 4
-                                                  ),
-                                                  color: Colors.blue,
-                                                  shape: BoxShape.circle
-                                              ),
-                                              padding: const EdgeInsets.all(2),
-                                              child: const Icon(
-                                                Icons.add,
-                                                size: 18,
-                                                color: Colors.white,
-                                              ),
-                                            )
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Consumer<ThemeNotifier>(
-                                        builder: (context, theme, child){
-                                          return Text(
-                                              'Your story',
-                                              style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                                                  fontWeight: FontWeight.w400,
-                                                  color: theme.isDark()?Colors.white38:Colors.grey
-                                              )
-                                          );
-                                        }
-                                    )
-                                  ],
-                                ),
+                                const StoryAvatarWidget(avatar: profileAvatar, name: '', myStory: true),
                                 const SizedBox(
-                                  width: 14,
+                                  width: 12,
                                 ),
                                 ListView.separated(
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: 10,
+                                    itemCount: stories.length,
                                     shrinkWrap: true,
                                     itemBuilder: (context, index){
-                                      return Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                              alignment: Alignment.center,
-                                              height: 95,
-                                              padding: const EdgeInsets.all(3),
-                                              decoration: BoxDecoration(
-                                                border: GradientBorder(
-                                                  width: 3.2,
-                                                  borderGradient: LinearGradient(
-                                                    colors: getColorsList,
-                                                    tileMode: TileMode.repeated,
-                                                    begin: Alignment.topLeft,
-                                                    end: Alignment.bottomRight,
-                                                    transform: const GradientRotation(0.0),
-                                                  ),
-                                                ),
-                                                borderRadius: BorderRadius.circular(1000),
-                                              ),
-                                              child: const Padding(
-                                                padding: EdgeInsets.all(2),
-                                                child: ClipRRect(
-                                                  borderRadius: BorderRadius.all(Radius.circular(10000)),
-                                                  child: Image(
-                                                    image: AssetImage(
-                                                      'assets/images/profile-image.jpg',
-                                                    ),
-                                                    height: 90,
-                                                  ),
-                                                ),
-                                              )
-                                          ),
-                                          const SizedBox(height: 2),
-                                          SizedBox(
-                                            width: 95,
-                                            child: Text(
-                                                'Your story',
-                                                textAlign: TextAlign.center,
-                                                style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                                                    fontWeight: FontWeight.w400
-                                                )
-                                            ),
-                                          )
-                                        ],
-                                      );
+                                      return StoryAvatarWidget(avatar: stories[index]['avatar'], name: stories[index]['name']);
                                     },
                                     separatorBuilder: (BuildContext context, int index) {
                                       return const SizedBox(
-                                        width: 14,
+                                        width: 12,
                                       );
                                     },
                                 )
@@ -197,13 +128,11 @@ class HomePageState extends State<HomePage>{
                             ),
                           ),
                         ),
-                        ListTile(
-                          title: Text('Item $index'),
-                        )
+                        const TimelinePostWidget()
                       ],
                     );
                   },
-                  childCount: 50, // Adjust this according to your needs
+                  childCount: 3, // Adjust this according to your needs
                 ),
               ),
             ],
@@ -212,94 +141,4 @@ class HomePageState extends State<HomePage>{
       )
     );
   }
-}
-
-class GradientBorder extends Border {
-  final Gradient borderGradient;
-  final double width;
-
-  const GradientBorder({
-    this.width = 0.0,
-    required this.borderGradient,
-  }) : super();
-
-  @override
-  void paint(
-      Canvas canvas,
-      Rect rect, {
-        TextDirection? textDirection,
-        BoxShape shape = BoxShape.rectangle,
-        BorderRadius? borderRadius,
-      }) {
-    if (isUniform) {
-      switch (shape) {
-        case BoxShape.circle:
-          assert(
-          borderRadius == null,
-          'A borderRadius can only be given for rectangular boxes.',
-          );
-          _paintGradientBorderWithCircle(canvas, rect);
-          break;
-        case BoxShape.rectangle:
-          if (borderRadius != null) {
-            _paintGradientBorderWithRadius(canvas, rect, borderRadius);
-            return;
-          }
-          _paintGradientBorderWithRectangle(canvas, rect);
-          break;
-      }
-      return;
-    }
-  }
-
-  void _paintGradientBorderWithRadius(
-      Canvas canvas, Rect rect, BorderRadius borderRadius) {
-    final Paint paint = Paint();
-    final RRect outer = borderRadius.toRRect(rect);
-
-    paint.shader = borderGradient.createShader(outer.outerRect);
-
-    if (width == 0.0) {
-      paint
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 0.0;
-      canvas.drawRRect(outer, paint);
-    } else {
-      final RRect inner = outer.deflate(width);
-      canvas.drawDRRect(outer, inner, paint);
-    }
-  }
-
-  void _paintGradientBorderWithCircle(Canvas canvas, Rect rect) {
-    final double radius = (rect.shortestSide - width) / 2.0;
-    final Paint paint = Paint();
-    paint
-      ..strokeWidth = width
-      ..style = PaintingStyle.stroke
-      ..shader = borderGradient
-          .createShader(Rect.fromCircle(center: rect.center, radius: radius));
-
-    canvas.drawCircle(rect.center, radius, paint);
-  }
-
-  void _paintGradientBorderWithRectangle(Canvas canvas, Rect rect) {
-    final Paint paint = Paint();
-    paint
-      ..strokeWidth = width
-      ..shader = borderGradient.createShader(rect)
-      ..style = PaintingStyle.stroke;
-
-    canvas.drawRect(rect.deflate(width / 2.0), paint);
-  }
-
-  factory GradientBorder.uniform({
-    Gradient gradient = const LinearGradient(colors: [Color(0x00000000)]),
-    double width = 1.0,
-  }) {
-    return GradientBorder._fromUniform(gradient, width);
-  }
-
-  const GradientBorder._fromUniform(Gradient gradient, this.width)
-      : assert(width >= 0.0),
-        borderGradient = gradient;
 }

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram_clone/widgets/avatar.dart';
 
 class BottomNavigation extends StatelessWidget {
   final int index;
@@ -94,14 +95,9 @@ class BottomNavigation extends StatelessWidget {
                   ),
                   shape: BoxShape.circle
               ),
-              child: const ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(100)),
-                child: Image(
-                  image: AssetImage(
-                    'assets/images/profile-image.jpg',
-                  ),
-                  height: 28,
-                ),
+              child: const Avatar(
+                url: 'https://instagram.fcmb1-2.fna.fbcdn.net/v/t51.2885-19/385796460_340793611680426_8122083031362328578_n.jpg?stp=dst-jpg_s150x150&_nc_ht=instagram.fcmb1-2.fna.fbcdn.net&_nc_cat=106&_nc_ohc=kWtNem0dSwcAX9kTFt5&edm=ACWDqb8BAAAA&ccb=7-5&oh=00_AfBAk7O7mTjJ01lzJr6PszNw5ZHl6vKOm46tyzLG7xbQ5Q&oe=655A36AC&_nc_sid=ee9879',
+                size: 28,
               )
           ),
         ),

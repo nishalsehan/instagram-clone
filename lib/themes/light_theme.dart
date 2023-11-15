@@ -21,17 +21,24 @@ final ThemeData lightTheme = ThemeData(
         unselectedItemColor: Colors.black,
     ),
     textTheme: const TextTheme(
-        labelSmall: TextStyle(
+        bodySmall: TextStyle(
             fontSize: 10,
             color: Colors.black54
         ),
-        labelMedium: TextStyle(
+        bodyMedium: TextStyle(
             fontSize: 12,
             color: Colors.black54
         ),
-        labelLarge: TextStyle(
+        bodyLarge: TextStyle(
             fontSize: 14,
             color: Colors.black87,
+            height: 1.2
+        ),
+        labelSmall: TextStyle(
+            fontSize: 16,
+            color: Colors.black87,
+            letterSpacing: 0,
+            fontWeight: FontWeight.w500
         ),
     )
     // other theme properties
