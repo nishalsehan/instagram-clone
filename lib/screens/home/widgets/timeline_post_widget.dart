@@ -17,10 +17,32 @@ class TimelinePostWidget extends StatefulWidget{
   State<TimelinePostWidget> createState() => TimelinePostWidgetState();
 }
 
-class TimelinePostWidgetState extends State<TimelinePostWidget> {
+class TimelinePostWidgetState extends State<TimelinePostWidget> with SingleTickerProviderStateMixin{
   final oCcy = NumberFormat("#,##0", "en_US");
   bool liked = false;
   bool saved = false;
+
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 50),
+    );
+    _animation = Tween<double>(begin: 1.0, end: 0.8).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
+    _controller.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +116,7 @@ class TimelinePostWidgetState extends State<TimelinePostWidget> {
               }
               liked = true;
             });
+            _animate();
           },
           images: widget.post['images'],
         ),
@@ -105,21 +128,25 @@ class TimelinePostWidgetState extends State<TimelinePostWidget> {
             children: [
               Row(
                 children: [
-                  InkWell(
-                    onTap: (){
-                      if(liked){
-                        widget.post['likes']--;
-                      }else{
-                        widget.post['likes']++;
-                      }
-                      setState(() {
-                        liked = !liked;
-                      });
-                    },
-                    child: SvgPicture.asset(
-                      liked?'assets/icons/heart-filled.svg':'assets/icons/heart-outline.svg',
-                      height: 29,
-                      colorFilter: ColorFilter.mode(liked?Colors.redAccent:Theme.of(context).iconTheme.color!, BlendMode.srcIn),
+                  Transform.scale(
+                    scale: _animation.value,
+                    child: InkWell(
+                      onTap: () {
+                        if(liked){
+                          widget.post['likes']--;
+                        }else{
+                          widget.post['likes']++;
+                        }
+                        setState(() {
+                          liked = !liked;
+                        });
+                        _animate();
+                      },
+                      child: SvgPicture.asset(
+                        liked?'assets/icons/heart-filled.svg':'assets/icons/heart-outline.svg',
+                        height: 29,
+                        colorFilter: ColorFilter.mode(liked?Colors.redAccent:Theme.of(context).iconTheme.color!, BlendMode.srcIn),
+                      ),
                     ),
                   ),
                   const SizedBox(
@@ -198,6 +225,15 @@ class TimelinePostWidgetState extends State<TimelinePostWidget> {
         const SizedBox(height: 12)
       ],
     );
+  }
+
+  void _animate() {
+    _animation.addStatusListener((AnimationStatus status) {
+      if (_controller.value == 1) {
+        _controller.reverse();
+      }
+    });
+    _controller.forward();
   }
 }
 
