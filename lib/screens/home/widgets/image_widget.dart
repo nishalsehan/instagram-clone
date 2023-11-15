@@ -30,6 +30,8 @@ class ImageWidgetState extends State<ImageWidget> with SingleTickerProviderState
   bool rotateLeft = true;
   Size size = Size.zero;
 
+  int currentImage = 0;
+
   @override
   void initState() {
     super.initState();
@@ -85,8 +87,11 @@ class ImageWidgetState extends State<ImageWidget> with SingleTickerProviderState
             options: CarouselOptions(
                 aspectRatio: aspectRatio??size.width/(size.width*0.6),
                 enableInfiniteScroll: false,
-                onPageChanged: (_,__){
-                  widget.onScroll(_);
+                onPageChanged: (index,__){
+                  widget.onScroll(index);
+                  setState(() {
+                    currentImage = index;
+                  });
                 },
                 viewportFraction: 1
             ),
@@ -108,6 +113,23 @@ class ImageWidgetState extends State<ImageWidget> with SingleTickerProviderState
                   )
               )
           ),
+          if(widget.images.length > 1)Positioned(
+            right: 12,
+            top: 12,
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.black45,
+                borderRadius: BorderRadius.all(Radius.circular(12))
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 6,horizontal: 8),
+              child: Text(
+                '${currentImage + 1}/${widget.images.length}',
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Colors.white
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
