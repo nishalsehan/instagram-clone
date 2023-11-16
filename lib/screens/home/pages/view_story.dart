@@ -1,4 +1,5 @@
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:instagram_clone/screens/home/widgets/story_widget.dart';
@@ -21,8 +22,8 @@ class ViewStoryState extends State<ViewStory>{
     'https://englishtribuneimages.blob.core.windows.net/gallary-content/2022/12/2022_12\$largeimg_111321063.JPG',
     'https://www.newarab.com/sites/default/files/1245748386.jpeg'
   ];
-  TextEditingController controller = TextEditingController();
-
+  TextEditingController messageController = TextEditingController();
+  CarouselController carouselController = CarouselController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +36,17 @@ class ViewStoryState extends State<ViewStory>{
           children: [
             Stack(
               children: [
-                StoryWidget(
-                  padding: padding,
-                  url: stories.first,
+                CarouselSlider(
+                    carouselController: carouselController,
+                    items: stories.map((story) => StoryWidget(
+                      padding: padding,
+                      url: story,
+                    )).toList(),
+                    options: CarouselOptions(
+                      height: size.height - padding.top - padding.bottom - size.height*0.09,
+                      viewportFraction: 1,
+
+                    )
                 ),
                 Container(
                   width: size.width,
@@ -48,6 +57,19 @@ class ViewStoryState extends State<ViewStory>{
                       begin: Alignment.topCenter,
                       end: Alignment.center,
                     )
+                  ),
+                ),
+                SizedBox(
+                  height: size.height - padding.top - padding.bottom - size.height*0.09,
+                  width: size.width,
+                  child: GestureDetector(
+                    onTapUp: (details){
+                      if(details.localPosition.dx < size.width*0.3){
+                        carouselController.previousPage(duration: const Duration(milliseconds: 10));
+                      }else{
+                        carouselController.nextPage(duration: const Duration(milliseconds: 10));
+                      }
+                    },
                   ),
                 ),
                 Positioned(
@@ -70,12 +92,13 @@ class ViewStoryState extends State<ViewStory>{
                          child:  const Icon(
                            Icons.close,
                            color: Colors.white,
-                           size: 40,
+                           size: 36,
                          ),
                        )
                       ],
                     )
-                )
+                ),
+
               ],
             ),
             Container(
@@ -87,7 +110,7 @@ class ViewStoryState extends State<ViewStory>{
                   SizedBox(
                     width: size.width*0.9 - 94,
                     child: TextField(
-                      controller: controller,
+                      controller: messageController,
                       decoration: InputDecoration(
                         isDense: true,
                         enabledBorder: OutlineInputBorder(
@@ -140,5 +163,12 @@ class ViewStoryState extends State<ViewStory>{
         ),
       )
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    messageController.dispose();
   }
 }

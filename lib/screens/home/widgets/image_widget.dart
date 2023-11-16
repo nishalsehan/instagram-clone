@@ -156,4 +156,11 @@ class ImageWidgetState extends State<ImageWidget> with SingleTickerProviderState
       });
     }));
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    controller.dispose();
+  }
 }

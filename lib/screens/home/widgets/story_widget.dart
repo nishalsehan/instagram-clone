@@ -19,8 +19,8 @@ class StoryWidget extends StatelessWidget{
         borderRadius: const BorderRadius.all(Radius.circular(8)),
         gradient: randomGradient(),
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 2),
-      width: size.width - 4,
+      margin: const EdgeInsets.symmetric(horizontal: 1),
+      width: size.width - 2,
       height: size.height - padding.top - padding.bottom - size.height*0.09,
       child: CachedNetworkImage(
         imageUrl: url,
