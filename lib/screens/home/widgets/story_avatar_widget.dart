@@ -1,4 +1,5 @@
 
+import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/widgets/avatar.dart';
 import 'package:provider/provider.dart';
@@ -12,62 +13,68 @@ class StoryAvatarWidget extends StatelessWidget{
   final String avatar;
   final String name;
   final bool myStory;
+  final Function(BuildContext) onClicked;
 
-  const StoryAvatarWidget({super.key, required this.avatar, required this.name, this.myStory = false});
+  const StoryAvatarWidget({super.key, required this.avatar, required this.name, this.myStory = false, required this.onClicked});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Stack(
-          children: [
-            Container(
-                alignment: Alignment.center,
-                height: 95,
-                padding: const EdgeInsets.all(3),
-                decoration: myStory?null:BoxDecoration(
-                  border: GradientBorder(
-                    width: 3.2,
-                    borderGradient: LinearGradient(
-                      colors: getColorsList,
-                      tileMode: TileMode.repeated,
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      transform: const GradientRotation(0.0),
-                    ),
-                  ),
-                  borderRadius: BorderRadius.circular(1000),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(2),
-                  child: Avatar(
-                    url: avatar,
-                    size: 90,
-                  ),
-                )
-            ),
-            if(myStory)Positioned(
-                bottom: 3,
-                right: 3,
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          width: 4
+        BouncingWidget(
+          onPressed: (){
+            onClicked(context);
+          },
+          child: Stack(
+            children: [
+              Container(
+                  alignment: Alignment.center,
+                  height: 95,
+                  padding: const EdgeInsets.all(3),
+                  decoration: myStory?null:BoxDecoration(
+                    border: GradientBorder(
+                      width: 3.2,
+                      borderGradient: LinearGradient(
+                        colors: getColorsList,
+                        tileMode: TileMode.repeated,
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        transform: const GradientRotation(0.0),
                       ),
-                      color: Colors.blue,
-                      shape: BoxShape.circle
+                    ),
+                    borderRadius: BorderRadius.circular(1000),
                   ),
-                  padding: const EdgeInsets.all(2),
-                  child: const Icon(
-                    Icons.add,
-                    size: 18,
-                    color: Colors.white,
-                  ),
-                )
-            )
-          ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(2),
+                    child: Avatar(
+                      url: avatar,
+                      size: 90,
+                    ),
+                  )
+              ),
+              if(myStory)Positioned(
+                  bottom: 3,
+                  right: 3,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            width: 4
+                        ),
+                        color: Colors.blue,
+                        shape: BoxShape.circle
+                    ),
+                    padding: const EdgeInsets.all(2),
+                    child: const Icon(
+                      Icons.add,
+                      size: 18,
+                      color: Colors.white,
+                    ),
+                  )
+              )
+            ],
+          )
         ),
         const SizedBox(height: 2),
         SizedBox(

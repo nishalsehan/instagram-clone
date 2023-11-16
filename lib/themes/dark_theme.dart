@@ -7,6 +7,7 @@ final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     dividerColor: Colors.black12,
     fontFamily: 'Instagram-Sans',
+    scaffoldBackgroundColor: const Color(0xFF121212),
     iconTheme: const IconThemeData(
         color: Colors.white
     ),

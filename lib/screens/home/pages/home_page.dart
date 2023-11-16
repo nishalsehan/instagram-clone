@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram_clone/screens/home/pages/view_story.dart';
 import '../../../utils/constants.dart';
 import '../widgets/story_avatar_widget.dart';
 import '../widgets/timeline_post_widget.dart';
@@ -174,7 +175,12 @@ class HomePageState extends State<HomePage>{
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const StoryAvatarWidget(avatar: profileAvatar, name: '', myStory: true),
+                        StoryAvatarWidget(
+                          avatar: profileAvatar,
+                          name: '',
+                          myStory: true,
+                          onClicked: (context){},
+                        ),
                         const SizedBox(
                           width: 12,
                         ),
@@ -183,7 +189,16 @@ class HomePageState extends State<HomePage>{
                           itemCount: stories.length,
                           shrinkWrap: true,
                           itemBuilder: (context, index){
-                            return StoryAvatarWidget(avatar: stories[index]['avatar'], name: stories[index]['name']);
+                            return StoryAvatarWidget(
+                              avatar: stories[index]['avatar'],
+                              name: stories[index]['name'],
+                              onClicked: (buildContext){
+                                RenderBox box = buildContext.findRenderObject() as RenderBox;
+                                Offset position = box.localToGlobal(const Offset(1,1));
+                                Offset offset = Offset(position.dx - (size.width/2), position.dy - (size.height/2));
+                                _openCustomDialog(buildContext, offset);
+                              },
+                            );
                           },
                           separatorBuilder: (BuildContext context, int index) {
                             return const SizedBox(
@@ -215,5 +230,27 @@ class HomePageState extends State<HomePage>{
         ),
       )
     );
+  }
+
+  void _openCustomDialog(parentContext,Offset offset) {
+    showGeneralDialog(barrierColor: Colors.black.withOpacity(0.5),
+        transitionBuilder: (context, a1, a2, widget) {
+          return Transform.scale(
+            scale: a1.value,
+            origin:  offset,
+            child: Opacity(
+              opacity: a1.value,
+              child: const ViewStory(),
+            ),
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 300),
+        barrierDismissible: true,
+        barrierLabel: '',
+        context: context,
+        pageBuilder: (context, animation1, animation2) {
+          return const ViewStory();
+        }
+     );
   }
 }

@@ -24,18 +24,21 @@ class BaseState extends State<Base>{
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final padding = MediaQuery.of(context).padding;
-    return Scaffold(
-      body: screens[currentIndex],
-      bottomNavigationBar: BottomNavigation(
-        index: currentIndex,
-        onClick: (index) {
-          setState(() {
-            currentIndex = index;
-          });
+    return WillPopScope(
+        onWillPop: () async{
+          return false;
         },
-      ),
+        child: Scaffold(
+          body: screens[currentIndex],
+          bottomNavigationBar: BottomNavigation(
+            index: currentIndex,
+            onClick: (index) {
+              setState(() {
+                currentIndex = index;
+              });
+            },
+          ),
+        )
     );
   }
 }
