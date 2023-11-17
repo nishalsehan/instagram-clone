@@ -1,5 +1,4 @@
 
-import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/widgets/avatar.dart';
 import 'package:provider/provider.dart';
@@ -13,17 +12,18 @@ class StoryAvatarWidget extends StatelessWidget{
   final String avatar;
   final String name;
   final bool myStory;
+  final bool viewed;
   final Function(BuildContext) onClicked;
 
-  const StoryAvatarWidget({super.key, required this.avatar, required this.name, this.myStory = false, required this.onClicked});
+  const StoryAvatarWidget({super.key, required this.avatar, required this.name, this.myStory = false, required this.onClicked, required this.viewed});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        BouncingWidget(
-          onPressed: (){
+        GestureDetector(
+          onTap: (){
             onClicked(context);
           },
           child: Stack(
@@ -31,9 +31,14 @@ class StoryAvatarWidget extends StatelessWidget{
               Container(
                   alignment: Alignment.center,
                   height: 95,
-                  padding: const EdgeInsets.all(3),
+                  width: 95,
+                  padding: EdgeInsets.all(viewed?1:3),
                   decoration: myStory?null:BoxDecoration(
-                    border: GradientBorder(
+                    shape: BoxShape.circle,
+                    border: viewed?Border.all(
+                      color: Colors.black26,
+                      width: 1
+                    ):GradientBorder(
                       width: 3.2,
                       borderGradient: LinearGradient(
                         colors: getColorsList,
@@ -43,10 +48,9 @@ class StoryAvatarWidget extends StatelessWidget{
                         transform: const GradientRotation(0.0),
                       ),
                     ),
-                    borderRadius: BorderRadius.circular(1000),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(2),
+                    padding: EdgeInsets.all(viewed?2:3),
                     child: Avatar(
                       url: avatar,
                       size: 90,

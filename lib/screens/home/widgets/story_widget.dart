@@ -25,6 +25,7 @@ class StoryWidget extends StatelessWidget{
       child: CachedNetworkImage(
         imageUrl: url,
         fit: BoxFit.fitWidth,
+        fadeInDuration: const Duration(milliseconds: 0),
       ),
     );
   }

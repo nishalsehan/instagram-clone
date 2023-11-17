@@ -1,5 +1,6 @@
 
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 
 class Avatar extends StatelessWidget{
@@ -12,10 +13,8 @@ class Avatar extends StatelessWidget{
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: const BorderRadius.all(Radius.circular(10000)),
-      child: Image(
-        image: NetworkImage(
-          url,
-        ),
+      child: CachedNetworkImage(
+        imageUrl: url,
         fit: BoxFit.cover,
         height: size,
         width: size,
